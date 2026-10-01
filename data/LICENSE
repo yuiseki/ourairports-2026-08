@@ -1,0 +1,44 @@
+Public domain
+
+Everything under this directory comes from OurAirports (https://ourairports.com/),
+taken from the GitHub repository davidmegginson/ourairports-data at commit
+9e51f13487de777bdc473a37d271981a2d0b30ca (2026-08-31T01:53:13Z).
+
+OurAirports releases its data to the public domain. The terms of use on its
+download page (https://ourairports.com/data/) say:
+
+  All data is released to the Public Domain, and comes with no guarantee of
+  accuracy or fitness for use.
+
+and credit is asked for but not required:
+
+  We'd love you to give us credit, like we give credit to our sources, but
+  you're not required to.
+
+If you give it: Data from OurAirports (https://ourairports.com/).
+
+The repository's own LICENSE file is The Unlicense, which speaks only of
+software. The public domain statement for the data is the one on the site.
+The site also credits the sources it drew on (FAA, DAFIF, GeoNames and
+others); whether every value taken from them could be placed in the public
+domain rests on the site's statement and was not checked further.
+
+The files under csv/ are the commit's own, byte for byte: each was compared
+with the git blob the commit names for it, and csv/MANIFEST.sha256 records
+the sha256, the blob and the size of each.
+
+The files under parquet/ were made from them, and three changes were made:
+
+  1. the header names lose the spaces airport-comments.csv puts after its
+     commas
+  2. airports and navaids gain a point geometry (WGS 84) from longitude_deg
+     and latitude_deg
+  3. the rows are sorted by id, countries and regions by code
+
+Columns are typed by name: id and *ref as integers, *_ft, *_khz, lighted and
+closed as integers, *_deg, *_degT and *_mhz as floats, everything else as the
+text of the CSV. No value was changed.
+
+The code that fetches, checks and converts is MIT, in the repository this
+dataset was built from (https://github.com/yuiseki/ourairports-2026-08), and
+does not apply here.

@@ -1,0 +1,85 @@
+# Where this data comes from and what was done to it.
+
+source:
+  name: OurAirports
+  maintainer: David Megginson and the OurAirports contributors
+  about: https://ourairports.com/about.html
+  data_page: https://ourairports.com/data/
+  repository: https://github.com/davidmegginson/ourairports-data
+  commit: 9e51f13487de777bdc473a37d271981a2d0b30ca
+  committed: 2026-08-31T01:53:13Z
+  fetched: 2026-10-02
+  licence:
+    applied: public domain
+    basis: |
+      The download page says "All data is released to the Public Domain, and
+      comes with no guarantee of accuracy or fitness for use." The
+      repository's LICENSE is The Unlicense and speaks only of software; the
+      statement for the data is the site's.
+    attribution_required: false
+    attribution_requested: true
+    share_alike: false
+
+snapshot:
+  note: |
+    OurAirports rebuilds all seven files every night at the same URLs, and no
+    row carries the date it last changed. A version can only be named by the
+    commit that holds it. This one is the last commit of August 2026, so the
+    month in the name is the month the data is from.
+
+    The files do not all change every night. Between snapshots airports.csv
+    and runways.csv move almost daily; countries.csv had not changed since
+    2025-02-28 and navaids.csv rarely does. The HTTP Last-Modified of the
+    GitHub Pages copies is the time the pages were rebuilt, not the time a
+    file's content changed.
+  checksums: csv/MANIFEST.sha256
+  verified_against: the git blob of each file in the commit's tree
+
+contents:
+  airports: 86002
+  runways: 48203
+  navaids: 11008
+  countries: 249
+  regions: 3987
+  airport_frequencies: 30343
+  airport_comments: 16406
+  airports_by_type:
+    small_airport: 42707
+    heliport: 23196
+    closed: 13482
+    medium_airport: 4109
+    seaplane_base: 1273
+    large_airport: 1172
+    balloonport: 63
+  airports_with_scheduled_service: 4333
+  airports_with_an_iata_code: 9057
+  airports_with_an_icao_code: 10473
+  japan:
+    airports: 3747
+    heliport: 3040
+    closed: 419
+    with_scheduled_service: 85
+
+integrity:
+  note: |
+    Checked by scripts/02_verify.py on the CSVs, with the csv module only.
+  ids_unique_in_every_file: true
+  airport_idents_unique: true
+  runways_without_an_airport: 0
+  frequencies_without_an_airport: 0
+  comments_without_an_airport: 0
+  navaids_with_an_unknown_associated_airport: 0
+  airports_with_an_unlisted_country: 0
+  airports_with_an_unlisted_region: 0
+
+modifications:
+  csv: none. The commit's files, byte for byte.
+  parquet:
+    - the header names lose the spaces airport-comments.csv puts after its commas
+    - airports and navaids gain a point geometry (WGS 84) from longitude_deg and latitude_deg
+    - rows are sorted by id, countries and regions by code
+  types: |
+    By column name, never inferred: id and *ref BIGINT; *_ft, *_khz, lighted
+    and closed INTEGER; *_deg, *_degT and *_mhz DOUBLE; everything else the
+    text of the CSV. regions.local_code "02" stays "02". A value that does not
+    fit stops the export instead of being rounded.
