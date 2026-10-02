@@ -78,6 +78,7 @@ modifications:
     - the header names lose the spaces airport-comments.csv puts after its commas
     - airports and navaids gain a point geometry (WGS 84) from longitude_deg and latitude_deg
     - rows are sorted by id, countries and regions by code
+    - written without bloom filters, which DuckDB reads for every row group a filter touches; the values are the same as in the first upload, compared both ways with EXCEPT ALL
   types: |
     By column name, never inferred: id and *ref BIGINT; *_ft, *_khz, lighted
     and closed INTEGER; *_deg, *_degT and *_mhz DOUBLE; everything else the

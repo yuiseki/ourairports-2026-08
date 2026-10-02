@@ -1,4 +1,5 @@
 import importlib.util
+import re
 from pathlib import Path
 
 import duckdb
@@ -70,3 +71,11 @@ def test_a_value_the_rule_does_not_fit_stops_the_run(tmp_path):
     rel = _rel(tmp_path, '"id","elevation_ft"\n1,12.5\n')
     with pytest.raises(duckdb.Error, match="elevation_ft is not an integer: 12.5"):
         rel.fetchall()
+
+
+def test_the_export_writes_without_bloom_filters():
+    # DuckDB reads a column's bloom filter in every row group a filter touches,
+    # even those the statistics rule out: over HTTP, a request each.
+    src = (Path(__file__).parents[1] / "scripts" / "03_export_parquet.py").read_text()
+    copies = re.findall(r"to '\{p\}' \(format parquet[^)]*\)", src)
+    assert copies and all("write_bloom_filter false" in c for c in copies)
